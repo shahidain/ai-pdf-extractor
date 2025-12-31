@@ -1,0 +1,23 @@
+{
+  "name": "document-extractor",
+  "version": "1.0.0",
+  "description": "Extract stock report data from PDFs using GPT-4.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "openai": "^4.24.1",
+    "pdf-to-img": "^4.2.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
