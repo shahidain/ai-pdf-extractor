@@ -1,102 +1,101 @@
 {
-    "type": "object",
-    "properties":{
-        "firstPage": {
-            "type": "object",
-            "properties": {
-                "reportType": {
-                    "type": "string",
-                    "enum": ["Sector Note", "Sector Update", "Sector Report"]
-                },
-                "reportDate": {
-                    "type": "string",
-                    "format": "date"
-                },
-                "reportTitle": {
-                    "type": "string"
-                },
-                "reportSubTitle": {
-                    "type": "string"
-                },
-                "sectorName": {
-                    "type": "string"
-                },
-            
-                "rating": {
-                    "type": "string",
-                    "enum": ["Underweight", "Overweight", "Neutral"]
-                },
-                "previousRating": {
-                    "type": "string",
-                    "enum": ["Underweight", "Overweight", "Neutral"]
-                },
-                "authors": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "email": {
-                                "type": "string",
-                                "format": "email"
-                            },
-                            "phone": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                },
-                "bulletPoints": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "summaryParagraphs": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "heading": {
-                                "type": "string"
-                            },
-                            "content": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "innerPagesParagraphs":{
-            "paragraphs": {
-                "type": "object",
-                "properties": {
-                    "style": {
-                        "type": "string",
-                        "enum": [
-                            "page header",
-                            "chapter heading",
-                            "subheading 1",
-                            "subheading 2",
-                            "body text",
-                            "callout",
-                            "exhibit title",
-                            "exhibit source",
-                            "bullet level 1",
-                            "bullet level 2",
-                            "bullet level 3",
-                            "page footer",
-                            "footnote"
-                        ]
-                    },
-                    "text": {
-                        "type": "string"
-                    }
-                }
-            }
-        }
-    }
+	"type": "object",
+	"properties": {
+		"firstPage": {
+			"type": "object",
+			"properties": {
+				"reportType": {
+					"type": "string",
+					"enum": ["Sector Note", "Sector Update", "Sector Report"]
+				},
+				"reportDate": {
+					"type": "string",
+					"format": "date"
+				},
+				"reportTitle": {
+					"type": "string"
+				},
+				"reportSubTitle": {
+					"type": "string"
+				},
+				"sectorName": {
+					"type": "string"
+				},
+				"rating": {
+					"type": "string",
+					"enum": ["Underweight", "Overweight", "Neutral"]
+				},
+				"previousRating": {
+					"type": "string",
+					"enum": ["Underweight", "Overweight", "Neutral"]
+				},
+				"authors": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"type": "string"
+							},
+							"email": {
+								"type": "string",
+								"format": "email"
+							},
+							"phone": {
+								"type": "string"
+							}
+						}
+					}
+				},
+				"bulletPoints": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				},
+				"summaryParagraphs": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"heading": {
+								"type": "string"
+							},
+							"content": {
+								"type": "string"
+							}
+						}
+					}
+				}
+			}
+		},
+		"innerPagesParagraphs": {
+			"paragraphs": {
+				"type": "object",
+				"properties": {
+					"style": {
+						"type": "string",
+						"enum": [
+							"page header",
+							"chapter heading",
+							"subheading 1",
+							"subheading 2",
+							"body text",
+							"callout",
+							"exhibit title",
+							"exhibit source",
+							"bullet level 1",
+							"bullet level 2",
+							"bullet level 3",
+							"page footer",
+							"footnote"
+						]
+					},
+					"text": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	}
 }

@@ -110,12 +110,17 @@ function generateInnerPagesMarkdown(innerPagesParagraphs: InnerPageParagraph[]):
   const lines: string[] = [];
 
   if (innerPagesParagraphs && innerPagesParagraphs.length > 0) {
-    lines.push("---");
-    lines.push("");
-    lines.push("# Report Content");
-    lines.push("");
+    let currentPage: number | undefined = undefined;
 
     for (const para of innerPagesParagraphs) {
+      // Add page header when page number changes
+      if (para.pageNumber !== undefined && para.pageNumber !== currentPage) {
+        currentPage = para.pageNumber;
+        lines.push("");
+        lines.push(`Page ${currentPage}`);
+        lines.push("-----------------------------------------");
+        lines.push("");
+      }
       const text = para.text || "";
       switch (para.style) {
         case "page header":
@@ -215,7 +220,10 @@ function generateMarkdown(
   lines.push("---");
   lines.push("");
 
-  // Generate first page markdown dynamically
+  // Generate first page markdown dynamically with page header
+  lines.push("Page 1");
+  lines.push("-----------------------------------------");
+  lines.push("");
   lines.push(...generateFirstPageMarkdown(report.firstPage));
 
   // Generate inner pages markdown
@@ -344,7 +352,9 @@ async function processPdf(pdfPath: string, schema: SchemaDefinition): Promise<Pr
 
       try {
         const result = await analyzeInnerPage(imagePath, pageNumber);
-        innerPagesParagraphs.push(...result.paragraphs);
+        // Add page number to each paragraph
+        const paragraphsWithPageNumber = result.paragraphs.map(p => ({ ...p, pageNumber }));
+        innerPagesParagraphs.push(...paragraphsWithPageNumber);
         allTokenUsages.push(result.tokenUsage);
         console.log(`✅ Page ${pageNumber} analyzed: ${result.paragraphs.length} content blocks (tokens: ${result.tokenUsage.totalTokens})`);
       } catch (error) {

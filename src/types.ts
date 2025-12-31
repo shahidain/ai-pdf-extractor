@@ -36,6 +36,7 @@ export interface InnerPageParagraph {
   style: ParagraphStyle;
   text?: string | null;
   table?: TableData | null;
+  pageNumber?: number;
 }
 
 // Generic report structure that works with any schema
