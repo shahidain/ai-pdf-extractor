@@ -241,6 +241,71 @@ async function isAlreadyProcessed(pdfPath: string): Promise<boolean> {
 }
 
 /**
+ * Regenerate markdown files from existing JSON files
+ * This is useful when JSON files are manually updated
+ */
+async function regenerateMarkdownFiles(schema: SchemaDefinition): Promise<void> {
+  console.log("\n🔄 Regenerating markdown files from existing JSON...");
+
+  const outputDir = config.outputBaseDirectory;
+
+  try {
+    const entries = await fs.readdir(outputDir, { withFileTypes: true });
+    const reportDirs = entries.filter((e) => e.isDirectory());
+
+    let regenerated = 0;
+
+    for (const dir of reportDirs) {
+      const reportName = dir.name;
+      const jsonPath = path.join(outputDir, reportName, `${reportName}.json`);
+      const mdPath = path.join(outputDir, reportName, `${reportName.toUpperCase()}.md`);
+
+      try {
+        // Check if JSON file exists
+        await fs.access(jsonPath);
+
+        // Read and parse JSON
+        const jsonContent = await fs.readFile(jsonPath, "utf-8");
+        const report = JSON.parse(jsonContent) as Report;
+
+        // Read existing markdown to extract token usage if available
+        let tokenUsage: TokenUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
+        let estimatedCostUSD = 0;
+
+        try {
+          const existingMd = await fs.readFile(mdPath, "utf-8");
+          // Try to extract token usage from existing markdown
+          const inputMatch = existingMd.match(/Input Tokens \| ([\d,]+)/);
+          const outputMatch = existingMd.match(/Output Tokens \| ([\d,]+)/);
+          const totalMatch = existingMd.match(/Total Tokens \| ([\d,]+)/);
+          const costMatch = existingMd.match(/Estimated Cost \(USD\)\*\* \| \*\*\$([\d.]+)/);
+
+          if (inputMatch) tokenUsage.inputTokens = parseInt(inputMatch[1].replace(/,/g, ""));
+          if (outputMatch) tokenUsage.outputTokens = parseInt(outputMatch[1].replace(/,/g, ""));
+          if (totalMatch) tokenUsage.totalTokens = parseInt(totalMatch[1].replace(/,/g, ""));
+          if (costMatch) estimatedCostUSD = parseFloat(costMatch[1]);
+        } catch {
+          // Markdown doesn't exist or couldn't parse, use defaults
+        }
+
+        // Generate new markdown
+        const markdown = generateMarkdown(report, schema.name, tokenUsage, estimatedCostUSD);
+        await fs.writeFile(mdPath, markdown, "utf-8");
+
+        console.log(`   ✅ Regenerated: ${mdPath}`);
+        regenerated++;
+      } catch {
+        // JSON file doesn't exist for this directory, skip
+      }
+    }
+
+    console.log(`\n✅ Regenerated ${regenerated} markdown file(s)`);
+  } catch (error) {
+    console.error(`❌ Error regenerating markdown files: ${error}`);
+  }
+}
+
+/**
  * Process a single PDF file with the given schema
  */
 async function processPdf(pdfPath: string, schema: SchemaDefinition): Promise<ProcessingResult> {
@@ -343,6 +408,9 @@ async function processPdf(pdfPath: string, schema: SchemaDefinition): Promise<Pr
  * Main entry point
  */
 async function main(): Promise<void> {
+  const args = process.argv.slice(2);
+  const regenerateOnly = args.includes("--regenerate-md") || args.includes("-r");
+
   console.log("🚀 Document Extractor Started");
   console.log(`📁 PDFs Directory: ${config.pdfsDirectory}`);
   console.log(`📁 Output Directory: ${config.outputBaseDirectory}`);
@@ -361,6 +429,13 @@ async function main(): Promise<void> {
   } catch (error) {
     console.error(`❌ Failed to load schema: ${error}`);
     process.exit(1);
+  }
+
+  // If regenerate-only mode, just regenerate markdown files and exit
+  if (regenerateOnly) {
+    await regenerateMarkdownFiles(schema);
+    console.log("\n🏁 Document Extractor Finished (Markdown Regeneration Mode)");
+    return;
   }
 
   // Ensure directories exist

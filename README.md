@@ -150,6 +150,17 @@ A formatted Markdown file is also generated with the extracted content for easy 
 | `build` | `npm run build` | Compile TypeScript to JavaScript |
 | `start` | `npm start` | Run the compiled application |
 | `dev` | `npm run dev` | Run directly with ts-node (development) |
+| `regenerate-md` | `npm run regenerate-md` | Regenerate Markdown files from existing JSON |
+
+### Regenerating Markdown Files
+
+If you manually update a JSON file and want to regenerate the corresponding Markdown file:
+
+```bash
+npm run regenerate-md
+```
+
+This will scan all extraction directories and regenerate Markdown files from their JSON sources.
 
 ## Troubleshooting
 

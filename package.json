@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts"
+    "dev": "ts-node src/index.ts",
+    "regenerate-md": "node dist/index.js --regenerate-md"
   },
   "dependencies": {
     "dotenv": "^16.3.1",

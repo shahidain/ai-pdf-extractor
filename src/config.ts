@@ -14,8 +14,9 @@ export function loadConfig(): Config {
     }
   }
 
-  // Get schema file from command line argument or environment variable
-  const schemaFile = process.argv[2] || process.env.SCHEMA_FILE;
+  // Get schema file from command line argument (skip flags starting with -) or environment variable
+  const nonFlagArgs = process.argv.slice(2).filter((arg) => !arg.startsWith("-"));
+  const schemaFile = nonFlagArgs[0] || process.env.SCHEMA_FILE;
 
   return {
     openaiApiKey: process.env.OPENAI_API_KEY!,

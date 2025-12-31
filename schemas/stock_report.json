@@ -22,18 +22,20 @@
                     "type": "string"
                 },
                 "targetPrice": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "The target price set by the analyst for the stock. This is a numeric value representing the expected future price of the stock. should be on first page with label 'Target peice'"
                 },
                 "marketPrice": {
-                    "type": "number"
+                    "type": "number",
+                    "description": "The current market price of the stock at the time of the report. This is a numeric value representing the stock's price in the market. should be on first page with label 'Market price' or 'Current price'"
                 },
                 "rating": {
                     "type": "string",
-                    "enum": ["Buy", "Hold", "Sell"]
+                    "enum": ["Buy", "Hold", "Sell", "Reduce", "Add"]
                 },
                 "previousRating": {
                     "type": "string",
-                    "enum": ["Buy", "Hold", "Sell", "N/A"]
+                    "enum": ["Buy", "Hold", "Sell", "Reduce", "No Change", "Add", "N/A"]
                 },
                 "upsideDownside": {
                     "type": "number"
